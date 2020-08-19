@@ -1,24 +1,43 @@
 import itertools
 from pprint import pprint
-from random import choice
+from random import shuffle
+
+from game.card import Card
+from game.constants import COLOUR_INDEX, RANK_INDEX
 
 
 class Deck:
     def __init__(self):
-        self.colours = ['clubs', 'diamon', 'hearts', 'spades']
-        self.count_cart_in_deck = 0
-        self.carts = []
-        self.cards_value = {'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7, 'eight': 8, 'nine': 9,
-                            'ten': 10, 'jack': 11, 'queen': 12, 'king': 13, 'ace': 14}
-        self.deck = {n + '_of_' + s: v for s in self.colours for n, v in self.cards_value.items()}
+        self.__card_deck = list()
 
     def make_deck(self):
-        return
+        for color in COLOUR_INDEX:
+            for rank in RANK_INDEX:
+                self.__card_deck.append(Card(color, rank))
 
+    def shuffle_deck(self):
+        shuffle(self.__card_deck)
+
+    @property
+    def get_deck(self):
+        return self.__card_deck
+
+    @property
     def get_cart(self):
-        return self.deck.get(choice(list(self.deck.keys())))
+        return self.__card_deck.pop()
+
+    @property
+    def get_len_deck(self):
+        return len(self.__card_deck)
 
 
 if __name__ == '__main__':
     deck = Deck()
-    pprint(deck.get_cart())
+    deck.make_deck()
+    deck.shuffle_deck()
+    card = deck.get_cart
+    print(card.get_name, card.get_colour, card.get_rank)
+    print(deck.get_len_deck)
+
+    # for card in deck.get_deck:
+    #     print(card.get_name)

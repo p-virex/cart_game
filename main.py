@@ -1,18 +1,37 @@
 # здесь подключаются модули
+from pprint import pprint
+
 import pygame
 
 # здесь определяются константы, классы и функции
+from core.render import RenderCard
+from game.deck import Deck
+
 FPS = 60
 
 # здесь происходит инициация, создание объектов и др.
 pygame.init()
-pygame.display.set_mode((600, 400))
+pygame.display.set_caption('Card game')
+screen = pygame.display.set_mode((1200, 800))
+pprint(dir(screen))
+screen.fill((42, 113, 0))
 clock = pygame.time.Clock()
 
 # если надо до цикла отобразить объекты на экране
 pygame.display.update()
 
+render_card = RenderCard(screen)
+
+deck = Deck()
+deck.make_deck()
+deck.shuffle_deck()
+card = deck.get_cart
+
+card_2 = deck.get_cart
+
+# render_card.render('2_of_clubs', (156, 275))
 # главный цикл
+x, y = 100, 100
 while True:
 
     # задержка
@@ -22,10 +41,27 @@ while True:
     for i in pygame.event.get():
         if i.type == pygame.QUIT:
             exit()
+        elif i.type == pygame.KEYDOWN:
+            print('!!!!!')
+            i = render_card.change_scale(card.image, 5)
+            render_card.render_image(i, (150, 250))
+        elif i.type == pygame.KEYUP:
+            print('@@@@@@')
 
+            i = render_card.change_scale(card.image, 6)
+            render_card.render_image(i, (350, 450))
+        elif i.type == pygame.K_LEFT:
+            i = render_card.change_scale(card.image, 6)
+            x =+ 10
+            y =+ 10
+            render_card.render_image(i, (x, y))
+            print(x, y)
     # --------
     # изменение объектов и многое др.
     # --------
 
+    # render_card.render_image(i, (150, 250))
+    i_2 = render_card.change_scale(card_2.image, 5)
+    render_card.render_image(i_2, (240, 350))
     # обновление экрана
     pygame.display.update()
