@@ -5,7 +5,7 @@ class RenderCard:
     def __init__(self, screen):
         self.screen = screen
 
-    def render_image(self, image, pos):
+    def render_image(self, image, pos): # hor, ver - по нижнему правому углу
         image_rect = image.get_rect(bottomright=pos)
         self.screen.blit(image, image_rect)
 

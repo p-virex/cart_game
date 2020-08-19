@@ -13,7 +13,6 @@ FPS = 60
 pygame.init()
 pygame.display.set_caption('Card game')
 screen = pygame.display.set_mode((1200, 800))
-pprint(dir(screen))
 screen.fill((42, 113, 0))
 clock = pygame.time.Clock()
 
@@ -28,7 +27,6 @@ deck.shuffle_deck()
 card = deck.get_cart
 
 card_2 = deck.get_cart
-
 # render_card.render('2_of_clubs', (156, 275))
 # главный цикл
 x, y = 100, 100
@@ -41,19 +39,7 @@ while True:
     for i in pygame.event.get():
         if i.type == pygame.QUIT:
             exit()
-        elif i.type == pygame.KEYDOWN:
-            print('!!!!!')
-            i = render_card.change_scale(card.image, 5)
-            render_card.render_image(i, (150, 250))
-        elif i.type == pygame.KEYUP:
-            print('@@@@@@')
 
-            i = render_card.change_scale(card.image, 6)
-            render_card.render_image(i, (350, 450))
-        elif i.type == pygame.K_LEFT:
-            i = render_card.change_scale(card.image, 6)
-            x =+ 10
-            y =+ 10
             render_card.render_image(i, (x, y))
             print(x, y)
     # --------
@@ -62,6 +48,6 @@ while True:
 
     # render_card.render_image(i, (150, 250))
     i_2 = render_card.change_scale(card_2.image, 5)
-    render_card.render_image(i_2, (240, 350))
+    render_card.render_image(i_2, (105,  145))
     # обновление экрана
     pygame.display.update()
