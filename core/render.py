@@ -1,14 +1,19 @@
 import pygame
 
+from game.constants import GREEN_TABLE
+
 
 class RenderCard:
     def __init__(self, screen):
         self.screen = screen
 
-    def render_image(self, image, pos): # hor, ver - по нижнему правому углу
+    def render_image(self, image, pos):  # hor, ver - по нижнему правому углу
         image_rect = image.get_rect(bottomright=pos)
         self.screen.blit(image, image_rect)
 
     @staticmethod
     def change_scale(image, scale):
         return pygame.transform.scale(image, (image.get_width()//scale, image.get_height()//scale))
+
+    def hide_all(self):
+        self.screen.fill(GREEN_TABLE)

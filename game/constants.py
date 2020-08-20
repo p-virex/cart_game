@@ -1,8 +1,10 @@
 from pprint import pprint
 
-SIZE_WINDOW = (1200, 800)
+SIZE_WINDOW = WIDTH, HEIGHT = (1200, 800)
 
 FPS_WINDOW = 60
+
+GREEN_TABLE = (42, 113, 0)
 
 COLOUR_INDEX = [x for x in range(0, 4)]
 
@@ -32,3 +34,6 @@ RANK_NAME = [
 
 RANK_NAME_INDEX = {RANK_NAME[i - 1]: i for i in RANK_INDEX}
 RANK_INDEX_NAME = {i: RANK_NAME[i - 1] for i in RANK_INDEX}
+
+START_POS_PLAYER_ARM = (380, 795)
+POS_TRAMP_CARD = (135, 400)

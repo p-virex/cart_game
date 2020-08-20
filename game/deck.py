@@ -1,6 +1,6 @@
 import itertools
 from pprint import pprint
-from random import shuffle
+from random import shuffle, randint
 
 from game.card import Card
 from game.constants import COLOUR_INDEX, RANK_INDEX
@@ -22,6 +22,10 @@ class Deck:
     def get_deck(self):
         return self.__card_deck
 
+    def return_card_in_deck(self, card):
+        position = randint(0, self.get_len_deck)
+        self.__card_deck.insert(position, card)
+
     @property
     def get_cart(self):
         return self.__card_deck.pop()
@@ -36,7 +40,7 @@ if __name__ == '__main__':
     deck.make_deck()
     deck.shuffle_deck()
     card = deck.get_cart
-    print(card.get_name, card.get_colour, card.get_rank)
+    print(card.name, card.colour, card.rank)
     print(deck.get_len_deck)
 
     # for card in deck.get_deck:

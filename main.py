@@ -4,8 +4,12 @@ from pprint import pprint
 import pygame
 
 # здесь определяются константы, классы и функции
+from core.game import GameController
+from core.logger import logger
 from core.render import RenderCard
+from game.constants import GREEN_TABLE
 from game.deck import Deck
+from game.player import Player
 
 FPS = 60
 
@@ -13,41 +17,45 @@ FPS = 60
 pygame.init()
 pygame.display.set_caption('Card game')
 screen = pygame.display.set_mode((1200, 800))
-screen.fill((42, 113, 0))
+screen.fill(GREEN_TABLE)
 clock = pygame.time.Clock()
 
 # если надо до цикла отобразить объекты на экране
 pygame.display.update()
 
-render_card = RenderCard(screen)
+render = RenderCard(screen)
 
 deck = Deck()
 deck.make_deck()
 deck.shuffle_deck()
-card = deck.get_cart
 
-card_2 = deck.get_cart
-# render_card.render('2_of_clubs', (156, 275))
-# главный цикл
-x, y = 100, 100
-while True:
+player = Player()
+game = GameController(render, deck)
+game.set_trump_card()
+game.set_client_player(player)
+game.add_start_card()
 
-    # задержка
+running = True
+
+while running:
     clock.tick(FPS)
+    game.render_player_cards()
+    game.render_trump_card()
+    events = pygame.event.get()
+    for event in events:
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            render.hide_all()
+            player.add_cart(deck.get_cart)
+            print('!!')
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+            print('@@@@@')
+            player.remove_card(0)
+            render.hide_all()
 
-    # цикл обработки событий
-    for i in pygame.event.get():
-        if i.type == pygame.QUIT:
-            exit()
-
-            render_card.render_image(i, (x, y))
-            print(x, y)
-    # --------
-    # изменение объектов и многое др.
-    # --------
-
-    # render_card.render_image(i, (150, 250))
-    i_2 = render_card.change_scale(card_2.image, 5)
-    render_card.render_image(i_2, (105,  145))
     # обновление экрана
-    pygame.display.update()
+    pygame.display.flip()
+
+logger.info('Exit')
+pygame.quit()

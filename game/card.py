@@ -14,18 +14,18 @@ class Card:
         self.__colour = colour
         self.__rank = rank
         self.__name_card = '{}_of_{}'.format(RANK_INDEX_NAME[rank], COLOUR_INDEX_NAME[colour])
-        self.__image = self.load_image()
+        self.__image = self.load_image()  # 100 x 145 scale 5
 
     @property
-    def get_rank(self):
+    def rank(self):
         return self.__rank
 
     @property
-    def get_colour(self):
+    def colour(self):
         return self.__colour
 
     @property
-    def get_name(self):
+    def name(self):
         return self.__name_card
 
     @property
@@ -33,5 +33,5 @@ class Card:
         return self.__image
 
     def load_image(self):
-        path = os.path.normpath(os.path.join(os.getcwd(), 'res/carts/{}.png'.format(self.get_name) ))
+        path = os.path.normpath(os.path.join(os.getcwd(), 'res/carts/{}.png'.format(self.name)))
         return pygame.image.load(path)
