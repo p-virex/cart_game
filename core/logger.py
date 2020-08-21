@@ -18,17 +18,17 @@ DATEFORMAT = '%Y-%m-%d %H:%M:%S'
 
 
 ROOT_FORMATTER = logging.Formatter(
-    fmt="%(asctime)s > %(filename)s > %(lineno)s > %(levelname)s : %(message)s",
+    fmt="%(asctime)card > %(filename)card > %(lineno)card > %(levelname)card : %(message)card",
     datefmt=DATEFORMAT
 )
 
 CONSOLE_FORMATTER = logging.Formatter(
-    fmt="%(asctime)s > %(filename)s > %(lineno)s > %(levelname)s : %(message)s",
+    fmt="%(asctime)card > %(filename)card > %(lineno)card > %(levelname)card : %(message)card",
     datefmt=DATEFORMAT
 )
 
 LOGGER_FORMATTER = logging.Formatter(
-    fmt="%(asctime)s > %(module)s > %(levelname)s : %(message)s",
+    fmt="%(asctime)card > %(module)card > %(levelname)card : %(message)card",
     datefmt=DATEFORMAT
 )
 

@@ -27,7 +27,7 @@ class Deck:
         self.__card_deck.insert(position, card)
 
     @property
-    def get_cart(self):
+    def get_card(self):
         return self.__card_deck.pop()
 
     @property
@@ -39,7 +39,7 @@ if __name__ == '__main__':
     deck = Deck()
     deck.make_deck()
     deck.shuffle_deck()
-    card = deck.get_cart
+    card = deck.get_card
     print(card.name, card.colour, card.rank)
     print(deck.get_len_deck)
 
