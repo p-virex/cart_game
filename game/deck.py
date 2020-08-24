@@ -1,5 +1,3 @@
-import itertools
-from pprint import pprint
 from random import shuffle, randint
 
 from game.card import Card
@@ -33,15 +31,3 @@ class Deck:
     @property
     def get_len_deck(self):
         return len(self.__card_deck)
-
-
-if __name__ == '__main__':
-    deck = Deck()
-    deck.make_deck()
-    deck.shuffle_deck()
-    card = deck.get_card
-    print(card.name, card.colour, card.rank)
-    print(deck.get_len_deck)
-
-    # for card in deck.get_deck:
-    #     print(card.get_name)

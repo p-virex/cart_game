@@ -1,8 +1,7 @@
-import os
-from pprint import pprint
-
 import pygame
 
+from core.logger import logger
+from core.service import load_image_card
 from game.constants import RANK_INDEX_NAME, COLOUR_INDEX_NAME
 
 
@@ -16,7 +15,7 @@ class Card(pygame.sprite.Sprite):
         self.__colour = colour
         self.__rank = rank
         self.__name_card = '{}_of_{}'.format(RANK_INDEX_NAME[rank], COLOUR_INDEX_NAME[colour])
-        self.image = self.load_image((100, 150))  # 100 x 150 scale 5
+        self.image = load_image_card((100, 150), self.name)  # 100 x 150 scale 5
         self.rect = self.image.get_rect()
 
     @property
@@ -31,22 +30,29 @@ class Card(pygame.sprite.Sprite):
     def name(self):
         return self.__name_card
 
-    def load_image(self, size):
-        path = os.path.normpath(os.path.join(os.getcwd(), 'res/carts/{}.png'.format(self.name)))
-        image = pygame.image.load(path)
-        return pygame.transform.scale(image, size)
-
     def set_position(self, pos):
         self.rect.x, self.rect.y = pos
 
-    def change_scale(self, h, w, len_arm):
+    def change_scale(self, h, w):
         current_h, current_w = self.image.get_size()
         if current_h == h and current_w == w:
             return
-        self.image = self.load_image((h, w))
-        # w_shift = 595 if w > 150 else 645
-        # self.set_position((105 * len_arm + 5, w_shift))
+        self.image = load_image_card((h, w), self.name)
 
     def check_click(self, mouse_pos):
         if self.rect.collidepoint(mouse_pos):
+            logger.info(f'{mouse_pos}, {self.name}')
             return self.name
+
+
+class DeckBackOfCard(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = load_image_card((150, 200), 'back_of_a_card')  # 100 x 150 scale 5
+        self.rect = self.image.get_rect()
+        self.rect.x = 1040
+        self.rect.y = 250
+
+    def check_click(self, mouse_pos):
+        if self.rect.collidepoint(mouse_pos):
+            return True
