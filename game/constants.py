@@ -1,4 +1,5 @@
 DEBUG = True
+SHORT_DECK = True
 
 SIZE_WINDOW = WIDTH, HEIGHT = (1200, 800)
 
@@ -8,14 +9,14 @@ GREEN_TABLE = (42, 113, 0)
 
 COLOUR_INDEX = [x for x in range(0, 4)]
 
-RANK_INDEX = [x for x in range(1, 14)]
+RANK_INDEX = [x for x in range(1, 14 if not SHORT_DECK else 10)]
 
 COLOUR_NAME = ['clubs', 'diamonds', 'hearts', 'spades']
 
 COLOUR_NAME_INDEX = {COLOUR_NAME[i]: i for i in COLOUR_INDEX}
 COLOUR_INDEX_NAME = {i: COLOUR_NAME[i] for i in COLOUR_INDEX}
 
-RANK_NAME = [
+LONG_DECK_RANK_NAME = [
     '2',
     '3',
     '4',
@@ -31,6 +32,9 @@ RANK_NAME = [
     'ace'
 ]
 
+SHORT_DECK_RANK_NAME = ['6', '7', '8', '9', '10', 'jack', 'queen', 'king', 'ace']
+
+RANK_NAME = LONG_DECK_RANK_NAME if not SHORT_DECK else SHORT_DECK_RANK_NAME
 
 RANK_NAME_INDEX = {RANK_NAME[i - 1]: i for i in RANK_INDEX}
 RANK_INDEX_NAME = {i: RANK_NAME[i - 1] for i in RANK_INDEX}

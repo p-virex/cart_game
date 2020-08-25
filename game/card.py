@@ -41,7 +41,6 @@ class Card(pygame.sprite.Sprite):
 
     def check_click(self, mouse_pos):
         if self.rect.collidepoint(mouse_pos):
-            logger.info(f'{mouse_pos}, {self.name}')
             return self.name
 
 

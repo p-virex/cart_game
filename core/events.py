@@ -5,7 +5,7 @@ from core.logger import logger
 from game.constants import BIG_CARD_WIDTH, BIG_CARD_HEIGHT, BASE_CARD_WIDTH, BASE_CARD_HEIGHT, DEBUG
 
 
-class Events:
+class EventsController:
     def __init__(self, player, deck, render, game, deck_image):
         self.p = player
         self.d = deck
@@ -25,10 +25,10 @@ class Events:
                     return
                 for card in self.p.hand:
                     if card.check_click(event.pos) and self.p.active_card and card.name == self.p.active_card.name:
-                        logger.info(f'Is active card: {self.p.active_card.name}')
-                        self.g.add_card_in_game_deck(self.p.active_card)
-                        self.p.remove_card(self.p.active_card)
-                        del self.p.active_card
+                        if self.g.player_defend and self.g.player_defend.name == 'Player':
+                            self.p.player_defend_event(self.g)
+                        else:
+                            self.p.player_turn(self.g)
                         return
                     if card.check_click(event.pos) and not self.p.active_card:
                         card.change_scale(BIG_CARD_WIDTH, BIG_CARD_HEIGHT)

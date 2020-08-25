@@ -1,6 +1,6 @@
 import pygame
 
-from core.events import Events
+from core.events import EventsController
 from core.game import GameController
 from core.logger import logger
 from core.render import RenderCard
@@ -41,9 +41,9 @@ deck_image = pygame.sprite.Group()
 db = DeckBackOfCard()
 deck_image.add(db)
 
-turn_player = game.check_first_attacker()
+game.check_first_attacker()
 
-events = Events(player, deck, render, game, db)
+events = EventsController(player, deck, render, game, db)
 
 while events.running:
     clock.tick(FPS)
@@ -59,10 +59,12 @@ while events.running:
     render.draw_text(25, f"Game deck: {game.len_game_deck}", (255, 255, 255), (GAME_DECK_WIDTH, GAME_DECK_HEIGHT-30))
     render.draw_text(25, f"Deck: {deck.get_len_deck}", (255, 255, 255), (1050, 230))
     render.draw_text(25, f"Click to get a card", (255, 255, 255), (1040, 460))
-    render.draw_text(25, f"Turn: {turn_player.name}", (255, 255, 255), (1040, 5))
+    render.draw_text(25, f"Turn: {game.player_attack.name}", (255, 255, 255), (1040, 5))
+    render.draw_text(25, f"Numbers clean cards: {game.len_clear_cards}", (255, 255, 255), (1000, 550))
     events.run(pygame.event.get())
     render.draw_pl_cards()
     pygame.display.flip()
+    game.game()
 
 logger.info('Exit')
 pygame.quit()
