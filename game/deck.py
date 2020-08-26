@@ -26,7 +26,8 @@ class Deck:
 
     @property
     def get_card(self):
-        return self.__card_deck.pop()
+        if self.__card_deck:
+            return self.__card_deck.pop()
 
     @property
     def get_len_deck(self):

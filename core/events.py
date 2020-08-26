@@ -6,12 +6,13 @@ from game.constants import BIG_CARD_WIDTH, BIG_CARD_HEIGHT, BASE_CARD_WIDTH, BAS
 
 
 class EventsController:
-    def __init__(self, player, deck, render, game, deck_image):
+    def __init__(self, player, deck, render, game, deck_image, buttons):
         self.p = player
         self.d = deck
         self.r = render
         self.g = game
         self.d_i = deck_image
+        self.b = buttons
         self.running = True
 
     def run(self, events):
@@ -19,18 +20,43 @@ class EventsController:
             if event.type == pygame.QUIT:
                 self.running = False
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == MOUSE_LEFT_BUTTON:
-                if self.d_i.rect.collidepoint(event.pos):
+                if self.b.rect.collidepoint(event.pos):
+                    print('!!!!!!!!!!!!!!!!!!!', self.p.made_turn, self.g.game_deck, self.g.turn_bot)
+                    if not self.p.made_turn and self.g.game_deck and self.g.turn_bot:
+                        # забрать карты если не чем отбиться
+                        self.g.pick_up_cards(self.p)
+                        logger.info('Игрок забрал колоду')
+                        del self.p.made_turn
+                        del self.g.bot.made_turn
+                        self.g.check_cards_in_hands()
+                        return
+                    if self.g.bot.made_turn and self.g.game_deck and not self.g.turn_bot:
+                        self.g.clear_game_deck()
+                        del self.g.bot.made_turn
+                        logger.info('Игрок отдал ход')
+                        self.g.set_player_turn(self.g.bot)
+                        return
+
+                if self.d_i.rect.collidepoint(event.pos) and DEBUG:
+                    # добавляем карту в руку игрока по клику на колоду, для отладки
                     self.p.add_cart(self.d.get_card)
                     logger.info('Get card from deck')
                     return
                 for card in self.p.hand:
                     if card.check_click(event.pos) and self.p.active_card and card.name == self.p.active_card.name:
-                        if self.g.player_defend and self.g.player_defend.name == 'Player':
+                        # проверем, что игрок кликнул по активной карте
+                        if self.g.turn_bot:
+                            # если ходит бот, то мы защищаемся
                             self.p.player_defend_event(self.g)
+                            return
                         else:
-                            self.p.player_turn(self.g)
-                        return
+                            if not self.g.game_deck:
+                                self.p.first_player_turn(self.g)
+                            else:
+                                self.p.player_turn(self.g)
+                            return
                     if card.check_click(event.pos) and not self.p.active_card:
+                        # активируем карту игрока, которой он намерен ходить
                         card.change_scale(BIG_CARD_WIDTH, BIG_CARD_HEIGHT)
                         self.p.active_card = card
                         break

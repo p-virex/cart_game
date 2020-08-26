@@ -1,7 +1,7 @@
 import pygame
 
 from core.logger import logger
-from game.constants import MAX_COUNT_CARD_IN_ARM
+from game.constants import MAX_COUNT_CARD_IN_ARM, BASE_CARD_WIDTH, BASE_CARD_HEIGHT
 
 
 class Player(object):
@@ -9,38 +9,64 @@ class Player(object):
         self.__hand = pygame.sprite.Group()
         self._active_card = None
         self.__name = name
+        self.__made_turn = None
 
     def bot_first_turn(self, trump_card):
         """
         Первая карта для хода бота, выбирается самая маленькая не козырная
         """
-        min_card = None
+        min_card, min_trump_card = None, None
         for card in self.hand:
             if card.colour == trump_card.colour:
+                if not min_trump_card:
+                    min_trump_card = card
+                elif min_trump_card and min_trump_card.rank > card.rank:
+                    min_trump_card = card
                 continue
             if not min_card:
                 min_card = card
             if card.rank < min_card.rank:
                 min_card = card
+        if not min_card and min_trump_card:
+            min_card = min_trump_card
         logger.info(f'Bot turn card: {min_card.name}')
         return min_card
 
     def player_turn(self, game):
-        print(game.attack, game.defend)
-        if game.attack:
+        if self.active_card.rank in [card.rank for card in game.game_deck]:
             game.add_card_in_game_deck(self.active_card)
             self.remove_card(self.active_card)
             del self.active_card
-            game.defend, game.attack = True, False
+            self.made_turn = True
+
+    def first_player_turn(self, game):
+        game.add_card_in_game_deck(self.active_card)
+        self.remove_card(self.active_card)
+        del self.active_card
+        self.made_turn = True
 
     def player_defend_event(self, game):
+        """
+        Событие для защиты от хода бота для игрока.
+
+        Когда игрок защищается, нам надо определить подходит ли выбранная карта для защиты:
+            * ранг  должен быть больше чем у той карты что в колоде
+            * масть должна совподать
+            * или карта должна быть козырем
+
+        :param game: игровой контролер
+        """
+        if self.made_turn:
+            return
+        # берем верхнюю карту в игровой колоде
         last_card = game.last_card_in_game_deck
-        if self.check_rank(last_card) and self.check_colour(last_card) or self.check_trump(game) and not game.defend:
+        if self.check_rank(last_card) and self.check_colour(last_card) or self.check_trump(game) and game.turn_bot:
+            # добовляем в игровую колоду активную карту, удаляем ее из руки игрока и удаляем активную карту
             game.add_card_in_game_deck(self.active_card)
             self.remove_card(self.active_card)
             del self.active_card
-            game.defend, game.attack = True, False
-        logger.info(f'Active card: {game.last_card_in_game_deck.name}')
+            self.made_turn = True
+        logger.info(f'Defend card: {game.last_card_in_game_deck.name}')
 
     def check_rank(self, card):
         if card.rank < self.active_card.rank:
@@ -58,8 +84,24 @@ class Player(object):
         return
 
     @property
+    def cards_in_hand(self):
+        return ', '.join([card.name for card in self.hand])
+
+    @property
     def name(self):
         return self.__name
+
+    @property
+    def made_turn(self):
+        return self.__made_turn
+
+    @made_turn.setter
+    def made_turn(self, value):
+        self.__made_turn = value
+
+    @made_turn.deleter
+    def made_turn(self):
+        self.__made_turn = None
 
     @property
     def active_card(self):
@@ -81,8 +123,10 @@ class Player(object):
         if self.len_hand >= MAX_COUNT_CARD_IN_ARM:
             logger.warning('Max count card in arm!')
             return
-        logger.info(f'{self.name}, add card: {card.name}')
-        self.__hand.add(card)
+        if card:
+            logger.info(f'To hand {self.name}, add card: {card.name}')
+            card.change_scale(BASE_CARD_WIDTH, BASE_CARD_HEIGHT)
+            self.__hand.add(card)
 
     def remove_card(self, card):
         return self.__hand.remove(card)
