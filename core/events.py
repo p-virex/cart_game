@@ -16,12 +16,12 @@ class EventsController:
         self.running = True
 
     def run(self, events):
+
         for event in events:
             if event.type == pygame.QUIT:
                 self.running = False
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == MOUSE_LEFT_BUTTON:
                 if self.b.rect.collidepoint(event.pos):
-                    print('!!!!!!!!!!!!!!!!!!!', self.p.made_turn, self.g.game_deck, self.g.turn_bot)
                     if not self.p.made_turn and self.g.game_deck and self.g.turn_bot:
                         # забрать карты если не чем отбиться
                         self.g.pick_up_cards(self.p)
@@ -36,7 +36,6 @@ class EventsController:
                         logger.info('Игрок отдал ход')
                         self.g.set_player_turn(self.g.bot)
                         return
-
                 if self.d_i.rect.collidepoint(event.pos) and DEBUG:
                     # добавляем карту в руку игрока по клику на колоду, для отладки
                     self.p.add_cart(self.d.get_card)

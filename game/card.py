@@ -49,8 +49,8 @@ class DeckBackOfCard(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = load_image_card((150, 200), 'back_of_a_card')  # 100 x 150 scale 5
         self.rect = self.image.get_rect()
-        self.rect.x = 1040
-        self.rect.y = 250
+        self.rect.x = 1025
+        self.rect.y = 270
 
     def check_click(self, mouse_pos):
         if self.rect.collidepoint(mouse_pos):

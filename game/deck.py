@@ -32,3 +32,6 @@ class Deck:
     @property
     def get_len_deck(self):
         return len(self.__card_deck)
+
+    def return_card(self, card, pos=0):
+        self.__card_deck.insert(pos, card)

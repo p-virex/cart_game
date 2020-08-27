@@ -11,27 +11,6 @@ class Player(object):
         self.__name = name
         self.__made_turn = None
 
-    def bot_first_turn(self, trump_card):
-        """
-        Первая карта для хода бота, выбирается самая маленькая не козырная
-        """
-        min_card, min_trump_card = None, None
-        for card in self.hand:
-            if card.colour == trump_card.colour:
-                if not min_trump_card:
-                    min_trump_card = card
-                elif min_trump_card and min_trump_card.rank > card.rank:
-                    min_trump_card = card
-                continue
-            if not min_card:
-                min_card = card
-            if card.rank < min_card.rank:
-                min_card = card
-        if not min_card and min_trump_card:
-            min_card = min_trump_card
-        logger.info(f'Bot turn card: {min_card.name}')
-        return min_card
-
     def player_turn(self, game):
         if self.active_card.rank in [card.rank for card in game.game_deck]:
             game.add_card_in_game_deck(self.active_card)
@@ -59,14 +38,14 @@ class Player(object):
         if self.made_turn:
             return
         # берем верхнюю карту в игровой колоде
-        last_card = game.last_card_in_game_deck
+        last_card = game.game_card
         if self.check_rank(last_card) and self.check_colour(last_card) or self.check_trump(game) and game.turn_bot:
             # добовляем в игровую колоду активную карту, удаляем ее из руки игрока и удаляем активную карту
             game.add_card_in_game_deck(self.active_card)
             self.remove_card(self.active_card)
             del self.active_card
             self.made_turn = True
-        logger.info(f'Defend card: {game.last_card_in_game_deck.name}')
+        logger.info(f'Defend card: {game.game_card.name}')
 
     def check_rank(self, card):
         if card.rank < self.active_card.rank:
