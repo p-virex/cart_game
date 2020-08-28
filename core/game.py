@@ -228,6 +228,7 @@ class GameController:
         return self.__trump_card
 
     def render_trump_card(self):
+        self.trump_card.change_scale(BIG_CARD_WIDTH, BIG_CARD_HEIGHT)
         self.render.render_image(self.__trump_card.image, POS_TRAMP_CARD)
 
     def set_client_player(self, player):

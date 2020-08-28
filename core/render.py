@@ -23,7 +23,7 @@ class Render:
         :return:
         """
         zone_cards = self.p.len_hand * WIDTH_CARD_FOR_UI
-        max_zone = ZONE_FOR_CARDS if self.p.len_hand < 15 else MAX_ZONE_FOR_CARDS
+        max_zone = ZONE_FOR_CARDS if self.p.len_hand < 10 else MAX_ZONE_FOR_CARDS
         if zone_cards <= max_zone:
             start_pos = WIDTH/2 - zone_cards/2
             shift = WIDTH_CARD_FOR_UI

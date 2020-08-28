@@ -1,48 +1,59 @@
-import pygame
-from pygame.locals import *
+import socket
+from tkinter import *
+
+# Решаем вопрос с кирилицей
+# reload(sys)
+# sys.setdefaultencoding('utf-8')
+# -----------------------------
+
+tk = Tk()
+
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+s.bind(( "10.128.104.21", 8080))
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+
+text = StringVar()
+name = StringVar()
+name.set('HabrUser')
+text.set('')
+tk.title('MegaChat')
+tk.geometry('400x300')
+
+log = Text(tk)
+nick = Entry(tk, textvariable=name)
+msg = Entry(tk, textvariable=text)
+msg.pack(side='bottom', fill='x', expand='true')
+nick.pack(side='bottom', fill='x', expand='true')
+log.pack(side='top', fill='both', expand='true')
 
 
+def loopproc():
+    log.see(END)
+    s.setblocking(False)
+    try:
+        message = s.recv(128)
+        print(message)
+        log.insert(END, message + '\n')
+    except:
+        tk.after(1, loopproc)
+        return
+    tk.after(1, loopproc)
+    return
 
-class Button:
-    def create_button(self, surface, color, x, y, length, height, width, text, text_color):
-        surface = self.draw_button(surface, color, length, height, x, y, width)
-        surface = self.write_text(surface, text, text_color, length, height, x, y)
-        self.rect = pygame.Rect(x, y, length, height)
-        return surface
 
-    def write_text(self, surface, text, text_color, length, height, x, y):
-        font_size = int(length // len(text))
-        myFont = pygame.font.SysFont("Calibri", font_size)
-        myText = myFont.render(text, 1, text_color)
-        surface.blit(myText, ((x + length / 2) - myText.get_width() / 2, (y + height / 2) - myText.get_height() / 2))
-        return surface
+def sendproc(event):
+    msf = name.get() + ':' + text.get()
+    sock.sendto(bytes(msf.encode('utf-8')), ( "10.128.104.21", 8080))
+    text.set('')
 
-    def draw_button(self, surface, color, length, height, x, y, width):
-        for i in range(1, 10):
-            s = pygame.Surface((length + (i * 2), height + (i * 2)))
-            s.fill(color)
-            alpha = (255 / (i + 2))
-            if alpha <= 0:
-                alpha = 1
-            s.set_alpha(alpha)
-            pygame.draw.rect(s, color, (x - i, y - i, length + i, height + i), width)
-            surface.blit(s, (x - i, y - i))
-        pygame.draw.rect(surface, color, (x, y, length, height), 0)
-        pygame.draw.rect(surface, (190, 190, 190), (x, y, length, height), 1)
-        return surface
 
-    def pressed(self, mouse):
-        if mouse[0] > self.rect.topleft[0]:
-            if mouse[1] > self.rect.topleft[1]:
-                if mouse[0] < self.rect.bottomright[0]:
-                    if mouse[1] < self.rect.bottomright[1]:
-                        print("Some button was pressed!")
-                        return True
-                    else:
-                        return False
-                else:
-                    return False
-            else:
-                return False
-        else:
-            return False
+msg.bind('<Return>', sendproc)
+
+msg.focus_set()
+
+tk.after(1, loopproc)
+tk.mainloop()

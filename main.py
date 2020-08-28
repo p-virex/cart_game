@@ -95,7 +95,7 @@ while events.running:
     # рисуем кнопку
     buttons_group.draw(screen)
     # рисуем весь текст
-    render.draw_text("Козырь:", (20, 230))
+    render.draw_text("Козырь:", (40, 230))
     render.draw_text(f"Карты в руке: {player.len_hand}", (GAME_DECK_WIDTH, 550))
     render.draw_text(f"Карты в руке бота: {bot.len_hand}",  (5, 5))
     render.draw_text(f"Игровая колода: {game.len_game_deck}, ходит: {game.name_turn_player}", (GAME_DECK_WIDTH-50, GAME_DECK_HEIGHT-30))
