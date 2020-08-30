@@ -33,9 +33,9 @@ class Card(pygame.sprite.Sprite):
     def set_position(self, pos):
         self.rect.x, self.rect.y = pos
 
-    def change_scale(self, h, w):
+    def change_scale(self, h, w, skip_check=False):
         current_h, current_w = self.image.get_size()
-        if current_h == h and current_w == w:
+        if current_h == h and current_w == w and not skip_check:
             return
         self.image = load_image_card((h, w), self.name)
 

@@ -23,7 +23,8 @@ class Render:
         :return:
         """
         zone_cards = self.p.len_hand * WIDTH_CARD_FOR_UI
-        max_zone = ZONE_FOR_CARDS if self.p.len_hand < 10 else MAX_ZONE_FOR_CARDS
+        # max_zone = ZONE_FOR_CARDS if self.p.len_hand < 10 else MAX_ZONE_FOR_CARDS
+        max_zone = zone_cards if zone_cards <= MAX_ZONE_FOR_CARDS else MAX_ZONE_FOR_CARDS
         if zone_cards <= max_zone:
             start_pos = WIDTH/2 - zone_cards/2
             shift = WIDTH_CARD_FOR_UI
@@ -32,7 +33,7 @@ class Render:
             shift = max_zone/self.p.len_hand
         for i, card in enumerate(sorted(self.p.hand, key=lambda x: x.rank, reverse=True)):
             v_pos = 595 if self.p.active_card and card.name == self.p.active_card.name else 645
-            if self.p.len_hand > 8 and not i % 2:
+            if self.p.len_hand > 10 and not i % 2:
                 # располагаем карты в шахматном порядке, если карт больше 8
                 v_pos -= 25
             card.set_position((start_pos, v_pos))

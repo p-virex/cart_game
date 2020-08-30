@@ -221,14 +221,15 @@ class GameController:
             self.__trump_card = self.deck.get_card
             logger.warning(f'New trump card: {self.trump_card.name}')
         logger.info(f'Set trump card: {self.trump_card.name}')
-        self.deck.return_card_in_deck(self.__trump_card)
+        self.deck.return_card(self.__trump_card)
+
 
     @property
     def trump_card(self):
         return self.__trump_card
 
     def render_trump_card(self):
-        self.trump_card.change_scale(BIG_CARD_WIDTH, BIG_CARD_HEIGHT)
+        self.trump_card.change_scale(100, 150)
         self.render.render_image(self.__trump_card.image, POS_TRAMP_CARD)
 
     def set_client_player(self, player):
